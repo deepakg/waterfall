@@ -87,7 +87,8 @@
           .attr("dy", -2)
           .attr("class", "small")
           .attr("text-anchor", "end")
-
+          .attr("id", function(d) { return "l_" + d.label });
+                
           //the bars
           svg.selectAll("waterfall")
           .data(data_points)
@@ -99,6 +100,13 @@
           .attr("width", function(d) { return d.value * width_per_sec; })
           .attr("class", "sel")
           .attr("value", function(d) { return d.value; })
+          .on("mouseover", function(d) {
+              svg.select("#l_" + d.label).style("text-decoration", "underline").style("font-weight", "bold");
+          })
+          .on("mouseout", function(d) {
+              svg.select("#l_" + d.label).style("text-decoration", "none").style("font-weight", "normal");
+          });
+
 
           //the bar labels
           svg.selectAll("label")
