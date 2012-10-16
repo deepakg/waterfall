@@ -58,33 +58,34 @@
           var svg = d3.select("#viz")
           .append("svg")
           .attr("width", max_width)
-          .attr("height", max_height);
+          .attr("height", max_height + 10);
 
           //y axis
           svg.append("line")
           .attr("x1", label_width - 0.5)
-          .attr("y1", 0)
+          .attr("y1", 10)
           .attr("x2", label_width - 0.5)
-          .attr("y2", function() { return data_points.length * bar_height })
+          .attr("y2", function() { return data_points.length * bar_height + 10})
           .attr("stroke", "black");
 
           //x axis
           svg.append("line")
           .attr("x1", label_width - 1)
-          .attr("y1", function() { return data_points.length * bar_height - 0.5 })
+          .attr("y1", function() { return data_points.length * bar_height - 0.5 + 10 })
           .attr("x2", plot_width + label_width)
-          .attr("y2", function() { return data_points.length * bar_height - 0.5 })
+          .attr("y2", function() { return data_points.length * bar_height - 0.5 + 10})
           .attr("stroke", "black");
 
                 
           //the y-axis labels
           svg.selectAll("label")
           .data(data_points)
-          .enter().append("text")
+          .enter()
+          .append("text")
           .text(function(d) { return d.label })
           .attr("x", 195)
-          .attr("y", function(d, i) { return (i * bar_height) + bar_height})
-          .attr("dy", -2)
+          .attr("y", function(d, i) { return (i * bar_height) + bar_height + 10})
+          .attr("dy", 0)
           .attr("class", "small")
           .attr("text-anchor", "end")
           .attr("id", function(d) { return "l_" + d.label });
@@ -92,20 +93,66 @@
           //the bars
           svg.selectAll("waterfall")
           .data(data_points)
-          .enter().append("rect")
+          .enter()
+          .append("rect")
           .attr("x", function(d, i) { return get_x(d, i); })
-          .attr("y", function(d, i) { return i * bar_height; })
+          .attr("y", function(d, i) { return i * bar_height + 10; })
           .attr("height", bar_height)
           .attr("fill", "#3333")
           .attr("width", function(d) { return d.value * width_per_sec; })
           .attr("class", "sel")
           .attr("value", function(d) { return d.value; })
+          .each(function(d, i) {
+              //guides from the beginning of each to y-axis labels
+              //to make it easy to coorelate each bar to the corresponding label
+              //especially for higher data values where the bar moves far away
+              //from the y-axis
+              var grp = svg.append("svg:g").attr("id", "g_" + d.label).style("display", "none");
+
+              grp.append("line")
+                  .attr("x1", label_width - 0.5)
+                  .attr("y1", ((i * bar_height) - bar_height / 2) + bar_height + 10 + 0.5)
+                  .attr("x2", get_x(d, i))
+                  .attr("y2", ((i * bar_height) - bar_height / 2) + bar_height + 10 + 0.5)
+                  .attr("stroke", "#000")
+                  .attr("stroke-width", 1);
+
+               grp.append("circle")
+                  .attr("cx", label_width - 0.5)
+                  .attr("cy", ((i * bar_height) - bar_height /2 ) + bar_height + 10 + 1)
+                  .attr("r", 3)
+                  .attr("stroke", "#000")
+                  .attr("stroke-width", 1)
+          })
           .on("mouseover", function(d) {
-              svg.select("#l_" + d.label).style("text-decoration", "underline").style("font-weight", "bold");
+              //underline and bold the label
+              //svg.select("#l_" + d.label).style("text-decoration", "underline").style("font-weight", "bold");
+              
+              //show the guide
+              svg.select("#g_" + d.label).style("display", "");
           })
           .on("mouseout", function(d) {
-              svg.select("#l_" + d.label).style("text-decoration", "none").style("font-weight", "normal");
+              //undo underline and bold
+              //svg.select("#l_" + d.label).style("text-decoration", "none").style("font-weight", "normal");
+
+              //hide the guide
+              svg.select("#g_" + d.label).style("display", "none");
           });
+                  
+
+
+
+          svg.selectAll("waterfall")
+          .data(data_points)
+          .enter()
+          .append("line")
+          .attr("x1", function(d, i) { return get_x(d, i) + (d.value * width_per_sec); })
+          .attr("y1", function(d, i) { return (i * bar_height) + 10; })
+          .attr("x2", function(d, i) { return get_x(d, i) + (d.value * width_per_sec) + 10 })
+          .attr("y2", function(d, i)  { return (i * bar_height) - bar_height/2 + 10; })
+          .attr("stroke", "#000")
+          .attr("stroke-width", 1)
+          .attr("opacity", 0.5)
 
 
           //the bar labels
@@ -113,9 +160,9 @@
           .data(data_points)
           .enter().append("svg:text")
           .text(function(d) { return d.value + (d.unit ? d.unit : 'ms') })
-          .attr("x", function(d, i) { return get_x(d, i) + d.value * width_per_sec + 2 })
-          .attr("y", function(d, i) { return (i * bar_height) + bar_height })
-          .attr("dy", -2)
+          .attr("x", function(d, i) { return get_x(d, i) + d.value * width_per_sec + 2 + 10 })
+          .attr("y", function(d, i) { return (i * bar_height) + bar_height + 10 })
+          .attr("dy", -10)
           .attr("class", "small")
 
 		</script>
