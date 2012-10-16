@@ -57,7 +57,7 @@ page.open(url, function(status) {
         
         var data_points = [];
         for (var year = min_year; year <= max_year; year++) {
-            if(year_runs[year]) {
+            if(year_runs[year] != undefined) {
                 var row = {label: year, value: year_runs[year], unit: 'runs'}
                 data_points.push(row);
             }
