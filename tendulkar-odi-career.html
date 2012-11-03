@@ -25,7 +25,7 @@
           var label_width = 200;
           var plot_width  = 600;
           var plot_margin_right = 100;
-          var plot_margin_bottom = 5;
+          var plot_margin_bottom = 15;
           var max_width = label_width + plot_width + plot_margin_right;
           var bar_height = 10;
           var bolt_time  = 9.69;
@@ -53,6 +53,14 @@
               return x;
           }
 
+          function get_cumulative_runs(index) {
+              var runs = 0;
+              for (var j = 0; j <= index; j++) {
+                  runs += data_points[j].value;
+              }
+              return runs;
+          }
+          
           //our 'canvas'
           var svg = d3.select("#viz")
           .append("svg")
@@ -94,11 +102,11 @@
           .data(data_points)
           .enter()
           .append("rect")
-          .attr("x", function(d, i) { return get_x(d, i); })
+          .attr("x", function(d, i) { return Math.ceil(get_x(d, i)); })
           .attr("y", function(d, i) { return i * bar_height + 10; })
           .attr("height", bar_height)
           .attr("fill", "#999")
-          .attr("width", function(d) { return d.value * width_per_sec; })
+          .attr("width", function(d) { return Math.floor(d.value * width_per_sec); })
           .attr("class", "bar")
           .attr("value", function(d) { return d.value; })
           .each(function(d, i) {
@@ -106,22 +114,49 @@
               //to make it easy to coorelate each bar to the corresponding label
               //especially for higher data values where the bar moves far away
               //from the y-axis
+              var x = get_x(d,i);
+              var y = i * bar_height - bar_height / 2 + bar_height + 10 + 0.5;
               var grp = svg.append("svg:g").attr("id", "g_" + d.label).style("display", "none");
 
               grp.append("line")
                   .attr("x1", label_width - 0.5)
-                  .attr("y1", ((i * bar_height) - bar_height / 2) + bar_height + 10 + 0.5)
-                  .attr("x2", get_x(d, i))
-                  .attr("y2", ((i * bar_height) - bar_height / 2) + bar_height + 10 + 0.5)
+                  .attr("y1", y)
+                  .attr("x2", x)
+                  .attr("y2", y)
                   .attr("stroke", "#000")
                   .attr("stroke-width", 1);
 
                grp.append("circle")
                   .attr("cx", label_width - 0.5)
-                  .attr("cy", ((i * bar_height) - bar_height /2 ) + bar_height + 10 + 1)
+                  .attr("cy", y + 0.5)
                   .attr("r", 3)
                   .attr("stroke", "#000")
-                  .attr("stroke-width", 1)
+                  .attr("stroke-width", 1);
+
+
+              //guides to show cumulative runs on x-axis
+              var x1 = Math.round(x + (d.value * width_per_sec)) - 0.5
+              var y2 = data_points.length * bar_height + 10;
+              grp.append("line")
+                  .attr("x1", x1)
+                  .attr("y1", y + bar_height/2 - 0.5)
+                  .attr("x2", x1)
+                  .attr("y2", y2 - 0.5)
+                  .attr("stroke", "#000");
+
+              grp.append("circle")
+                  .attr("cx", x1)
+                  .attr("cy", y2 - 0.5)
+                  .attr("r", 3)
+                  .attr("stroke", "#000")
+                  .attr("stroke-width", 1);
+
+              grp.append("text")
+                  .text(get_cumulative_runs(i) + " " + d.unit)
+                  .attr("x", x1)
+                  .attr("y", y2 + 12)
+                  .attr("text-anchor", "middle")
+                  .attr("class", "small")
           })
           .on("mouseover", function(d) {
               //underline and bold the label
@@ -142,9 +177,6 @@
               window.open(url);
           });
                   
-
-
-
           svg.selectAll("waterfall")
           .data(data_points)
           .enter()
@@ -156,7 +188,6 @@
           .attr("stroke", "#000")
           .attr("stroke-width", 1)
           .attr("opacity", 0.5)
-
 
           //the bar labels
           svg.selectAll("label")
