@@ -4,7 +4,7 @@ Visualising Tendulkar's ODI career using D3.js
 TL;DR you can use waterfall charts to visualise cricketer stats. This
 is an attempt at plotting Tendulkar's ODI career.
 
-Screenshot:
+Screenshot:<br/>
 ![Sachin Tendulkar's ODI career as a waterfall plot](http://www.deepakg.com/prog/img/waterfall-tendulkar-odi.png)    
 
 [Live Demo](http://www.deepakg.com/prog/code/waterfall/tendulkar-odi-career.html)
