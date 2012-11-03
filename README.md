@@ -5,7 +5,7 @@ TL;DR you can use waterfall charts to visualise cricketer stats. This
 is an attempt at plotting Tendulkar's ODI career.
 
 Screenshot:<br/>
-![Sachin Tendulkar's ODI career as a waterfall plot](http://www.deepakg.com/prog/img/waterfall-tendulkar-odi.png)    
+![Sachin Tendulkar's ODI career as a waterfall plot](http://www.deepakg.com/prog/img/waterfall-tendulkar-odi-career.png)    
 
 [Live Demo](http://www.deepakg.com/prog/code/waterfall/tendulkar-odi-career.html)
 
@@ -27,8 +27,10 @@ shortcomings, it is _a_ way to look at data and it does call out some
 things immediately, like 1998 being Tendulkar's most prolific year
 (odi-wise).
 
-The data comes courtesy of [ESPN Cricinfo's](http://www.espncricinfo.com/) brilliant and ever reliable
-[Statsguru](http://stats.espncricinfo.com/ci/engine/stats/index.html). I got the data
-through simple jQuery DOM traversal in Chrome's web console and
-converted it into a [PhantomJS](https://github.com/ariya/phantomjs/)
-script. You can find it under the crawlers directory.
+The data comes courtesy of [ESPN
+Cricinfo's](http://www.espncricinfo.com/) brilliant and ever reliable
+[Statsguru](http://stats.espncricinfo.com/ci/engine/stats/index.html). I
+got the data through simple jQuery DOM traversal in Chrome's web
+console and converted it into a
+[PhantomJS](https://github.com/ariya/phantomjs/) script. You can find
+it under the crawlers directory.
