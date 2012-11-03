@@ -28,7 +28,7 @@ things immediately, like 1998 being Tendulkar's most prolific year
 (odi-wise).
 
 The data comes courtesy of [ESPN Cricinfo's](http://www.espncricinfo.com/) brilliant and ever reliable
-[Statsguru](http://www.espncricinfo.com/statsguru/). I got the data
+[Statsguru](http://stats.espncricinfo.com/ci/engine/stats/index.html). I got the data
 through simple jQuery DOM traversal in Chrome's web console and
 converted it into a [PhantomJS](https://github.com/ariya/phantomjs/)
 script. You can find it under the crawlers directory.
