@@ -114,8 +114,8 @@
               //to make it easy to coorelate each bar to the corresponding label
               //especially for higher data values where the bar moves far away
               //from the y-axis
-              var x = get_x(d,i);
-              var y = i * bar_height - bar_height / 2 + bar_height + 10 + 0.5;
+              var x = Math.ceil(get_x(d,i));
+              var y = Math.ceil(i * bar_height - bar_height / 2 + bar_height + 10) +  0.5;
               var grp = svg.append("svg:g").attr("id", "g_" + d.label).style("display", "none");
 
               grp.append("line")
@@ -135,14 +135,15 @@
 
 
               //guides to show cumulative runs on x-axis
-              var x1 = Math.round(x + (d.value * width_per_sec)) - 0.5
+              var x1 = x + Math.ceil(d.value * width_per_sec);
               var y2 = data_points.length * bar_height + 10;
               grp.append("line")
-                  .attr("x1", x1)
-                  .attr("y1", y + bar_height/2 - 0.5)
-                  .attr("x2", x1)
-                  .attr("y2", y2 - 0.5)
-                  .attr("stroke", "#000");
+                  .attr("x1", x1 - 0.5)
+                  .attr("y1", y + Math.floor(bar_height/2) - 0.5)
+                  .attr("x2", x1 - 0.5)
+                  .attr("y2", y2)
+                  .attr("stroke", "#000")
+                  .attr("stroke-width", 1);
 
               grp.append("circle")
                   .attr("cx", x1)
